@@ -1,29 +1,25 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "The Blog",
-  description: "Criado por FC2Con - Sistemas",
+  title: 'The Blog - Este é um blog com NextJS',
+  description: 'Criado por FC2Con - Sistemas ',
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang='pt-BR'>
+      <body>
+        <header>
+          <h1>Header</h1>
+        </header>
+
+        <div className='bg-amber-400'>{children}</div>
+
+        <footer>
+          <h1>Footer</h1>
+        </footer>
+      </body>
     </html>
   );
 }
