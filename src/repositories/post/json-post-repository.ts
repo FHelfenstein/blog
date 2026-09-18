@@ -1,5 +1,5 @@
 import { PostModel } from '@/app/post/post-model';
-import { PostRepository } from './post-repository';
+import { IPostRepository } from './Ipost-repository';
 import { resolve } from 'node:path';
 import { readFile } from 'fs/promises';
 
@@ -13,7 +13,7 @@ const JSON_POSTS_FILE_PATH = resolve(
   'posts.json',
 );
 
-export class JsonPostRepository implements PostRepository {
+export class JsonPostRepository implements IPostRepository {
   // método findAll - recupera todos os posts
   async findAll(): Promise<PostModel[]> {
     const posts = await this.readFromDisk();
@@ -40,7 +40,7 @@ export class JsonPostRepository implements PostRepository {
 }
 
 // Instancia da classe
-export const postRepository: PostRepository = new JsonPostRepository();
+//export const postRepository: PostRepository = new JsonPostRepository();
 
 /*
 // Execução dos métodos implementados na classe

@@ -3,8 +3,6 @@
 import clsx from 'clsx';
 
 export function Header() {
-  console.log('Header');
-
   return (
     <h1
       className={clsx(
@@ -18,7 +16,7 @@ export function Header() {
       )}
       onClick={() => alert('Testando Blog....')}
     >
-      App - The Blog
+      App - Blog V1.0
     </h1>
   );
 }
