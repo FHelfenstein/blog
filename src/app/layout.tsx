@@ -14,7 +14,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           <h1>Header</h1>
         </header>
 
-        <div className='bg-amber-400'>{children}</div>
+        <div>{children}</div>
 
         <footer>
           <h1>Footer</h1>
