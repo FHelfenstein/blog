@@ -6,22 +6,27 @@ import { readFile } from 'fs/promises';
 const ROOT_DIR = process.cwd(); // retorna o caminho raiz da aplicação
 const JSON_POSTS_FILE_PATH = resolve(
   ROOT_DIR,
-  'blog',
   'src',
   'db',
   'seed',
   'posts.json',
 );
 
+const SIMULATE_WAIT_IN_MS = 5000;
+
 export class JsonPostRepository implements IPostRepository {
   // método findAll - recupera todos os posts
   async findAll(): Promise<PostModel[]> {
+    await this.SimulateWait();
+
     const posts = await this.readFromDisk();
     return posts;
   }
 
   // método findById - recuperar apenas um post passando o Id como parâmetro
   async findById(id: string): Promise<PostModel> {
+    await this.SimulateWait();
+
     const posts = await this.findAll();
     const post = posts.find(post => post.id === id);
 
@@ -36,6 +41,13 @@ export class JsonPostRepository implements IPostRepository {
     const parsedJson = JSON.parse(jsonContent);
     const { posts } = parsedJson;
     return posts;
+  }
+
+  // função para aguardar 5 segundos - para poder simular testes de Loading...
+  private async SimulateWait() {
+    if (SIMULATE_WAIT_IN_MS <= 0) return;
+
+    await new Promise(resolve => setTimeout(resolve, SIMULATE_WAIT_IN_MS));
   }
 }
 
