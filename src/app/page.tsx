@@ -1,18 +1,22 @@
-import { postRepository } from '@/repositories/post';
+import { Container } from '@/components/Container';
+import { PostsList } from '@/components/PostsList';
+import { SpinLoader } from '@/components/SpinLoader';
+import { Suspense } from 'react';
 
 export default async function Homepage() {
-  const posts = await postRepository.findAll();
-
   return (
-    <div>
-      <header className='text-6xl font-bold text-center py-8'>
-        AQUI É O HEADER
+    <Container>
+      <header>
+        <h1 className='text-6xl font-bold text-center py-8'>AQUI É O HEADER</h1>
       </header>
-      {posts &&
-        posts.map(post => {
-          return <p key={post.id}>{post.title}</p>;
-        })}
-      <footer className='text-6xl font-bold text-center py-8'>FOOTER</footer>
-    </div>
+
+      <Suspense fallback={<SpinLoader />}>
+        <PostsList />
+      </Suspense>
+
+      <footer>
+        <p className='text-6xl font-bold text-center py-8'>FOOTER</p>
+      </footer>
+    </Container>
   );
 }
