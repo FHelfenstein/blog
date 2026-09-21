@@ -20,8 +20,8 @@
       "content": "Em vez de configurar tudo manualmente, basta criar um arquivo com o nome certo e o Next.js entende que aquilo representa uma página.",
       "coverImageUrl": "/images/bryen_6.png",
       "published": true,
-      "createdAt": "2026-04-07T00:24:38.616Z",
-      "updatedAt": "2026-04-07T00:33:56.907Z",
+      "createdAt": "2026-09-20T00:24:38.616Z",
+      "updatedAt": "2026-09-20T00:33:56.907Z",
       "author": "Marina Duarte"
     },
     {
@@ -116,8 +116,8 @@
       "content": "o Next.js já vem com várias decisões prontas, permitindo que você comece a desenvolver mais rapidamente.",
       "coverImageUrl": "/images/bryen_2.png",
       "published": false,
-      "createdAt": "2026-01-07T22:54:10",
-      "updatedAt": "2026-01-07T22:54:10",
+      "createdAt": "2026-09-21T15:54:10",
+      "updatedAt": "2026-09-21T16:54:10",
       "author": "Carla Mendes"
     }
   ]
