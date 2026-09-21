@@ -1,4 +1,4 @@
-import { PostModel } from '@/app/post/post-model';
+import { PostModel } from '@/models/post-model';
 import { IPostRepository } from './Ipost-repository';
 import { resolve } from 'node:path';
 import { readFile } from 'fs/promises';

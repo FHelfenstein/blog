@@ -1,4 +1,4 @@
-import { PostModel } from '@/app/post/post-model';
+import { PostModel } from '@/models/post-model';
 
 export interface IPostRepository {
   findAll(): Promise<PostModel[]>;
