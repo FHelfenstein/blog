@@ -16,18 +16,20 @@ const SIMULATE_WAIT_IN_MS = 0;
 
 export class JsonPostRepository implements IPostRepository {
   // método findAll - recupera todos os posts
-  async findAll(): Promise<PostModel[]> {
+  async findAllPublic(): Promise<PostModel[]> {
     await this.SimulateWait();
 
+    console.log('\n', 'findAllPublic', '\n');
+
     const posts = await this.readFromDisk();
-    return posts;
+    return posts.filter(post => post.published == true);
   }
 
   // método findById - recuperar apenas um post passando o Id como parâmetro
   async findById(id: string): Promise<PostModel> {
     await this.SimulateWait();
 
-    const posts = await this.findAll();
+    const posts = await this.findAllPublic();
     const post = posts.find(post => post.id === id);
 
     if (!post) throw new Error('Post não encontrado');
