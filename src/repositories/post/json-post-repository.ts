@@ -23,8 +23,6 @@ export class JsonPostRepository implements IPostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    await this.SimulateWait();
-
     const posts = await this.findAllPublic();
     const post = posts.find(post => post.id === id);
 
