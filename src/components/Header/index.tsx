@@ -12,7 +12,7 @@ export function Header() {
           'lg:text-7xl/normal lg:py-12', // acima de 1024px
         )}
       >
-        <Link href='#'>The Blog</Link>
+        <Link href='/'>The Blog</Link>
       </h1>
     </header>
   );
