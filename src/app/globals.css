@@ -1,3 +1,12 @@
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+/*
+@layer utilities {
+  .container-article {
+    background-color: beige;
+  }
+}
+*/
 
 @custom-variant dark (&:where(.dark, .dark *));
