@@ -1,6 +1,7 @@
 import { findAllPublicPostsCached } from '@/lib/post/queries';
 import { PostCoverImage } from '../PostCoverImage';
 import { PostSummary } from '../PostSummary';
+import { createImageSrc } from '@/utils/create-image-src';
 
 export async function PostFeatured() {
   const posts = await findAllPublicPostsCached();
@@ -14,7 +15,7 @@ export async function PostFeatured() {
           href: postLink,
         }}
         imageProps={{
-          src: post.coverImageUrl,
+          src: createImageSrc(post.coverImageUrl),
           width: 1200,
           height: 720,
           alt: post.title,
