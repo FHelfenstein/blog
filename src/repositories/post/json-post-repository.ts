@@ -15,6 +15,13 @@ const JSON_POSTS_FILE_PATH = resolve(
 const SIMULATE_WAIT_IN_MS = 0;
 
 export class JsonPostRepository implements IPostRepository {
+  async findAll(): Promise<PostModel[]> {
+    await this.SimulateWait();
+
+    const posts = await this.readFromDisk();
+    return posts;
+  }
+
   async findAllPublic(): Promise<PostModel[]> {
     await this.SimulateWait();
 
