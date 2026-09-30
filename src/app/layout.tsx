@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import './theme.css';
 import './globals.css';
 import { Container } from '@/components/Container';
 import { Header } from '@/components/Header';
