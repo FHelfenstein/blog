@@ -3,10 +3,13 @@
 
 'use server';
 
-export async function revalidateExampleAction(formData: FormData) {
-  const path = formData.get('path') || null;
-  const name = formData.get('name') || null;
+//import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
+export async function revalidateExampleAction(formData: FormData) {
+  const path = formData.get('path') || '';
   console.log('Estou em uma server action', path);
-  console.log('Server action meu nome é: ', name);
+
+  //revalidatePath(`${path}`);
+  revalidateTag('randomuser', '');
 }
