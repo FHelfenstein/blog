@@ -4,7 +4,7 @@ import { drizzleDb } from '@/db/drizzle';
 
 export class DrizzlePostRepository implements IPostRepository {
   async findAllPublic(): Promise<PostModel[]> {
-    console.log('\n', 'D findAllPublic', '\n');
+    console.log('\n', 'Drizzle findAllPublic', '\n');
 
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -15,20 +15,20 @@ export class DrizzlePostRepository implements IPostRepository {
   }
 
   async findBySlugPublic(slug: string): Promise<PostModel> {
-    console.log('\n', 'D findBySlugPublic', '\n');
+    console.log('\n', 'Drizzle findBySlugPublic', '\n');
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { and, eq }) =>
         and(eq(posts.published, true), eq(posts.slug, slug)),
     });
 
-    if (!post) throw new Error('Post não encontrado para slug');
+    if (!post) throw new Error(`Post não encontrado para slug ${slug}`);
 
     return post;
   }
 
   async findAll(): Promise<PostModel[]> {
-    console.log('\n', 'D findAll', '\n');
+    console.log('\n', 'Drizzle findAll', '\n');
 
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -38,23 +38,23 @@ export class DrizzlePostRepository implements IPostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    console.log('\n', 'D findBy', '\n');
+    console.log('\n', 'Drizzle findById', '\n');
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
     });
 
-    if (!post) throw new Error('Post não encontrado para ID');
+    if (!post) throw new Error(`Post não encontrado para ID ${id}`);
 
     return post;
   }
 }
 
-(async () => {
-  const repo = new DrizzlePostRepository();
-  const posts = await repo.findAll();
+// (async () => {
+//   const repo = new DrizzlePostRepository();
+//   const posts = await repo.findAll();
 
-  posts.forEach(post =>
-    console.log(post.id, ' : ', post.title, ' - ', post.published),
-  );
-})();
+//   posts.forEach(post =>
+//     console.log(post.id, ' : ', post.title, ' - ', post.published),
+//   );
+// })();

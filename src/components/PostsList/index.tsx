@@ -19,9 +19,9 @@ export async function PostsList() {
                   href: postLink,
                 }}
                 imageProps={{
+                  src: post.coverImageUrl,
                   width: 1200,
                   height: 720,
-                  src: post.coverImageUrl,
                   alt: post.title,
                 }}
               />

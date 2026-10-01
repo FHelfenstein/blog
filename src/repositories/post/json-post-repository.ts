@@ -3,6 +3,7 @@ import { IPostRepository } from './Ipost-repository';
 import { resolve } from 'node:path';
 import { readFile } from 'fs/promises';
 
+/**Bloco de código que monta o caminho absoluta para leitura de arquivos seed json */
 const ROOT_DIR = process.cwd(); // retorna o caminho raiz da aplicação
 const JSON_POSTS_FILE_PATH = resolve(
   ROOT_DIR,
@@ -30,10 +31,10 @@ export class JsonPostRepository implements IPostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    const posts = await this.findAllPublic();
+    const posts = await this.findAll();
     const post = posts.find(post => post.id === id);
 
-    if (!post) throw new Error('Post não encontrado com ID');
+    if (!post) throw new Error(`Post não encontrado com ID ${id}`);
 
     return post;
   }
@@ -42,8 +43,7 @@ export class JsonPostRepository implements IPostRepository {
     const posts = await this.findAllPublic();
     const post = posts.find(post => post.slug === slug);
 
-    if (!post) throw new Error('Post não encontrado com slug');
-
+    if (!post) throw new Error(`Post não encontrado com slug ${slug}`);
     return post;
   }
 

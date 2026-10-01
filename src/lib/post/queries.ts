@@ -6,8 +6,10 @@ export const findAllPublicPostsCached = cache(
   async () => await postRepository.findAllPublic(),
 );
 
+export const findAllCached = cache(async () => await postRepository.findAll());
+
 export const findPostByIdCached = cache(async (id: string) => {
-  const post = await postRepository.findBySlugPublic(id).catch(() => undefined);
+  const post = await postRepository.findById(id).catch(() => undefined);
 
   if (!post) {
     notFound();
