@@ -15,12 +15,12 @@ import { postsTable } from './schemas';
 // })();
 
 /**Teste para atualização de registro de posts no banco de dados */
-(async () => {
-  await drizzleDb
-    .update(postsTable)
-    .set({
-      title: '10 hábitos para aumentar sua produtividade',
-      published: true,
-    })
-    .where(eq(postsTable.slug, '10-habitos-para-aumentar-sua-produtividade'));
-})();
+// (async () => {
+//   await drizzleDb
+//     .update(postsTable)
+//     .set({
+//       title: '10 hábitos para aumentar sua produtividade',
+//       published: true,
+//     })
+//     .where(eq(postsTable.slug, '10-habitos-para-aumentar-sua-produtividade'));
+// })();
