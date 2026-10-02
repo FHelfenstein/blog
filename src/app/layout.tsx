@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import { Container } from '@/components/Container';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+
+import './globals.css';
 
 export const metadata: Metadata = {
   title: {
@@ -12,7 +13,11 @@ export const metadata: Metadata = {
   description: 'Aplicativo para gerenciamento de posts. ',
 };
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+type RootLayoutProps = {
+  children: React.ReactNode;
+};
+
+export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang='pt-BR' className=''>
       <body>
