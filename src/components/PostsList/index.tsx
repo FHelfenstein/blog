@@ -1,6 +1,6 @@
 import { PostCoverImage } from '../PostCoverImage';
 import { PostSummary } from '../PostSummary';
-import { findAllPublicPostsCached } from '@/lib/post/queries';
+import { findAllPublicPostsCached } from '@/lib/post/queries/public';
 
 // O COMANDO slice utilizado em conjunto com o map avança uma posição no array ,para que o postFeatured não seja repetido dentro do postsList
 
