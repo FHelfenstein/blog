@@ -2,6 +2,7 @@ import { PostModel } from '@/models/post-model';
 import { IPostRepository } from './Ipost-repository';
 import { resolve } from 'node:path';
 import { readFile } from 'fs/promises';
+import { SIMULATE_WAIT_IN_MS } from '@/lib/constants';
 
 /**Bloco de código que monta o caminho absoluta para leitura de arquivos seed json */
 const ROOT_DIR = process.cwd(); // retorna o caminho raiz da aplicação
@@ -12,9 +13,6 @@ const JSON_POSTS_FILE_PATH = resolve(
   'seed',
   'posts.json',
 );
-
-const SIMULATE_WAIT_IN_MS = 0;
-
 export class JsonPostRepository implements IPostRepository {
   async findAll(): Promise<PostModel[]> {
     await this.SimulateWait();
