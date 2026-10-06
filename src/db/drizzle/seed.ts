@@ -7,9 +7,9 @@ import { postsTable } from './schemas';
   const posts = await jsonPostRepository.findAll();
 
   try {
-    //await drizzleDb.delete(postsTable); // ISSO AQUI TOMAR CUIDADO , LIMPA TODA MINHA BASE DE DADOS
-
+    await drizzleDb.delete(postsTable); // ISSO AQUI TOMAR CUIDADO , LIMPA TODA MINHA BASE DE DADOS
     await drizzleDb.insert(postsTable).values(posts);
+
     console.log();
     console.log(`${posts.length} posts foram salvos na base de dados.`);
     console.log();
