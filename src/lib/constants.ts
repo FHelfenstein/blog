@@ -1,1 +1,2 @@
 export const SIMULATE_WAIT_IN_MS = 100;
+export const IMAGE_UPLOADER_MAX_SIZE = 921600; // 900 KB * 1024 = 921600
