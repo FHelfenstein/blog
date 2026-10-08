@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { ImageUploader } from '../ImageUploader';
 
 export function ManagePostForm() {
-  const [contentValue, setContentValue] = useState('**Ola mundo!!!**');
+  const [contentValue, setContentValue] = useState('');
   return (
     <form action='' className='mb-16'>
       <div className='flex flex-col gap-6'>

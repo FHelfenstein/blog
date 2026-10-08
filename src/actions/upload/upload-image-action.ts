@@ -1,6 +1,12 @@
 'use server';
 
-import { IMAGE_UPLOADER_MAX_SIZE } from '@/lib/constants';
+import {
+  IMAGE_SERVER_URL,
+  IMAGE_UPLOADER_DIRECTORY,
+  IMAGE_UPLOADER_MAX_SIZE,
+} from '@/lib/constants';
+import { mkdir, writeFile } from 'fs/promises';
+import { extname, resolve } from 'path';
 
 type uploadImageActionResult = {
   url: string;
@@ -10,6 +16,8 @@ type uploadImageActionResult = {
 export async function uploadImageAction(
   formData: FormData,
 ): Promise<uploadImageActionResult> {
+  // TODO: Verificar se o usuário está logado
+
   const makeResult = ({ url = '', error = '' }) => ({ url, error });
 
   if (!(formData instanceof FormData)) {
@@ -34,5 +42,22 @@ export async function uploadImageAction(
   }
 
   //TODO: enviei o arquivo
-  return makeResult({ url: 'URL' });
+  const imageExtension = extname(file.name);
+  const imageName = `${Date.now()}${imageExtension}`;
+
+  const fullPath = resolve(process.cwd(), 'public', IMAGE_UPLOADER_DIRECTORY);
+
+  await mkdir(fullPath, { recursive: true });
+
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  const fullPathAbsolute = resolve(fullPath, imageName);
+
+  await writeFile(fullPathAbsolute, buffer);
+
+  const url = `${IMAGE_SERVER_URL}/${imageName}`;
+
+  console.log('URL: ', url);
+
+  return makeResult({ url });
 }

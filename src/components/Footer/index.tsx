@@ -5,10 +5,12 @@ export function Footer() {
   return (
     <footer className='pb-16 text-center'>
       <p>
-        <span className='text-sm/tight'>
-          FC2ConSistemas Copyright &copy; {new Date().getFullYear()}
+        <span className='text-[10px]/tight text-slate-600'>
+          Copyright &copy; {new Date().getFullYear()}
         </span>
-        <Link href='/'> | The Blog</Link>
+        <Link className='text-slate-950 ml-2' href='/'>
+          | The Blog
+        </Link>
       </p>
     </footer>
   );
