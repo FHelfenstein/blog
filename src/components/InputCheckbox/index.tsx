@@ -22,6 +22,7 @@ export function InputCheckbox({
         )}
         id={id}
         type={type}
+        defaultChecked={props.defaultChecked}
       />
 
       {labelText && (
