@@ -25,7 +25,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
   );
 
   const { formState } = state;
-  console.log('Valor do estado: ', formState);
+  //console.log('Valor do estado: ', formState);
 
   const [contentValue, setContentValue] = useState(publicPost?.content || '');
 

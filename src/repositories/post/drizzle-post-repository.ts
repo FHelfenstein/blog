@@ -56,6 +56,11 @@ export class DrizzlePostRepository implements IPostRepository {
 
     return post;
   }
+
+  deleteById(id: string): void {
+    asyncDelay(SIMULATE_WAIT_IN_MS, true);
+    logColor(`deleteById: ${id}`, Date.now());
+  }
 }
 
 // (async () => {

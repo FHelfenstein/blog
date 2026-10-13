@@ -20,6 +20,7 @@ export default async function PostsListAdmin() {
             className={clsx(
               'py-2 px-2',
               !post.published && 'bg-slate-300',
+              post.published && 'bg-slate-200',
               'flex gap-2 items-center justify-between',
             )}
             key={post.id}

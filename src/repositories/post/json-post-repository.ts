@@ -59,6 +59,10 @@ export class JsonPostRepository implements IPostRepository {
 
     await new Promise(resolve => setTimeout(resolve, SIMULATE_WAIT_IN_MS));
   }
+
+  deleteById(id: string): void {
+    throw new Error('Method not implemented.');
+  }
 }
 
 // Instancia da classe
