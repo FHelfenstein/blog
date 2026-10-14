@@ -1,6 +1,16 @@
 'use server';
 
-import { PublicPost } from '@/dto/post/dto';
+import { makePartialPublicPost, PublicPost } from '@/dto/post/dto';
+import { PostCreateSchema } from '@/lib/post/validation';
+import { PostModel } from '@/models/post-model';
+import { getErrorMessages } from '@/utils/get-zod-error-messages';
+import { z } from 'zod';
+import { v4 as uuidV4 } from 'uuid';
+import { makeSlugFromText } from '@/utils/make-slug-from-text';
+import { drizzleDb } from '@/db/drizzle';
+import { postsTable } from '@/db/drizzle/schemas';
+import { redirect } from 'next/navigation';
+import { revalidateTag } from 'next/cache';
 
 type CreatePostActionState = {
   formState: PublicPost;
@@ -21,10 +31,30 @@ export async function createPostAction(
   }
 
   const formDataToObj = Object.fromEntries(formData.entries()); // transforma os dados de formData para um objeto do javaScript
-  console.log('Objeto convertido: ', formDataToObj);
+  const zodParsedObj = PostCreateSchema.safeParse(formDataToObj);
 
-  return {
-    formState: prevState.formState,
-    errors: [],
+  if (!zodParsedObj.success) {
+    const errors = getErrorMessages(z.treeifyError(zodParsedObj.error));
+
+    return {
+      formState: makePartialPublicPost(formDataToObj),
+      errors,
+    };
+  }
+
+  const validPostData = zodParsedObj.data;
+  const newPost: PostModel = {
+    ...validPostData,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    id: uuidV4(),
+    slug: makeSlugFromText(validPostData.title),
+    published: true,
   };
+
+  // TODO: mover este método para o repositório
+  await drizzleDb.insert(postsTable).values(newPost);
+
+  revalidateTag('posts');
+  redirect(`/admin/post/${newPost.id}`);
 }
