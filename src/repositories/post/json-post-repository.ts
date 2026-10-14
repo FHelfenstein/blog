@@ -45,6 +45,20 @@ export class JsonPostRepository implements IPostRepository {
     return post;
   }
 
+  // Mutation
+  create(post: PostModel): Promise<PostModel> {
+    throw new Error('Method not implemented.');
+  }
+  delete(id: string): Promise<PostModel> {
+    throw new Error('Method not implemented.');
+  }
+  update(
+    id: string,
+    newPost: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
+  ): Promise<PostModel> {
+    throw new Error('Method not implemented.');
+  }
+
   // função que le o arquivo JSON , faz o parse e retorna um array de POSTS
   private async readFromDisk(): Promise<PostModel[]> {
     const jsonContent = await readFile(JSON_POSTS_FILE_PATH, 'utf-8');
@@ -58,10 +72,6 @@ export class JsonPostRepository implements IPostRepository {
     if (SIMULATE_WAIT_IN_MS <= 0) return;
 
     await new Promise(resolve => setTimeout(resolve, SIMULATE_WAIT_IN_MS));
-  }
-
-  deleteById(id: string): void {
-    throw new Error('Method not implemented.');
   }
 }
 
