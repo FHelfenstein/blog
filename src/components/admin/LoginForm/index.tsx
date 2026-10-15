@@ -48,10 +48,12 @@ export function LoginForm() {
           disabled={isPending}
         />
 
-        <Button className='mt-4' type='submit'>
+        <Button className='mt-4' type='submit' disabled={isPending}>
           <LogInIcon />
           Entrar
         </Button>
+
+        {!!state.error && <p className='text-red-600'>{state.error}</p>}
       </form>
     </div>
   );
