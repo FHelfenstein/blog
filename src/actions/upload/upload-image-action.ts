@@ -28,7 +28,7 @@ export async function uploadImageAction(
   const uploadSize =
     Number(process.env.NEXT_PUBLIC_IMAGE_UPLOAD_MAX_SIZE) || 921600;
   if (file.size > uploadSize) {
-    const readableMaxSize = uploadSize / 1024;
+    const readableMaxSize = (uploadSize / 1024).toFixed(2);
     return makeResult({
       error: `Arquivo de imagem muito grande, Máx: ${readableMaxSize}KB.`,
     });

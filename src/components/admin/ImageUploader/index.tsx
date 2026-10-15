@@ -38,7 +38,7 @@ export function ImageUploader({ disabled = false }: ImageUploaderProps) {
 
     const uploadSize = Number(process.env.IMAGE_UPLOADER_MAX_SIZE) || 921600;
     if (file.size > uploadSize) {
-      const readableMaxSize = uploadSize / 1024;
+      const readableMaxSize = (uploadSize / 1024).toFixed(2);
       showMessage.error(`Imagem muito grande. Máx: ${readableMaxSize}KB.`);
 
       fileInput.value = '';
