@@ -2,7 +2,7 @@ import { PostModel } from '@/models/post-model';
 import { IPostRepository } from './Ipost-repository';
 import { resolve } from 'node:path';
 import { readFile, writeFile } from 'fs/promises';
-import { SIMULATE_WAIT_IN_MS } from '@/lib/constants';
+import { asyncDelay } from '@/utils/async-delay';
 
 /**Bloco de código que monta o caminho absolutO para leitura de arquivos seed json */
 const ROOT_DIR = process.cwd(); // retorna o caminho raiz da aplicação
@@ -68,18 +68,15 @@ export class JsonPostRepository implements IPostRepository {
   }
 
   // DELETE
-  async delete(id: string): Promise<PostModel> {
+  async delete(id: string): Promise<void> {
     const posts = await this.findAll();
     const postIndex = posts.findIndex(p => p.id === id);
 
     if (postIndex < 0) {
       throw new Error('Post não existe');
     }
-
-    const post = posts[postIndex];
     posts.splice(postIndex, 1);
     await this.writeFromDisk(posts);
-    return post;
   }
 
   // UPDATE
@@ -89,35 +86,35 @@ export class JsonPostRepository implements IPostRepository {
   ): Promise<PostModel> {
     const posts = await this.findAll();
     const postIndex = posts.findIndex(p => p.id === id);
-    const savePost = posts[postIndex];
 
     if (postIndex < 0) {
       throw new Error('Post não existe');
     }
+    const oldPost = posts[postIndex];
 
-    const newPost = {
-      ...savePost,
+    const updatePost = {
+      ...oldPost,
       ...newPostData,
       updateAt: new Date().toISOString(),
     };
-    posts[postIndex] = newPost;
+    posts[postIndex] = updatePost;
     await this.writeFromDisk(posts);
-    return newPost;
+    return updatePost;
   }
 
   // função que le o arquivo JSON , faz o parse e retorna um array de POSTS
   private async readFromDisk(): Promise<PostModel[]> {
-    const jsonContent = await readFile(JSON_POSTS_FILE_PATH, 'utf-8');
-    const parsedJson = JSON.parse(jsonContent);
+    const parsedJson = JSON.parse(
+      await readFile(JSON_POSTS_FILE_PATH, 'utf-8'),
+    );
     const { posts } = parsedJson;
     return posts;
   }
 
-  // função para aguardar 5 segundos - para poder simular testes de Loading...
   private async SimulateWait() {
-    if (SIMULATE_WAIT_IN_MS <= 0) return;
-
-    await new Promise(resolve => setTimeout(resolve, SIMULATE_WAIT_IN_MS));
+    await asyncDelay(Number(process.env.SIMULATE_WAIT_IN_MS) || 0, true);
+    // if (SIMULATE_WAIT_IN_MS <= 0) return;
+    // await new Promise(resolve => setTimeout(resolve, SIMULATE_WAIT_IN_MS));
   }
 
   private async writeFromDisk(posts: PostModel[]): Promise<void> {

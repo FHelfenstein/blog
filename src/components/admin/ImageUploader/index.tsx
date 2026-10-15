@@ -3,7 +3,6 @@
 import { uploadImageAction } from '@/actions/upload/upload-image-action';
 import { showMessage } from '@/adapters/showMessage';
 import { Button } from '@/components/Button';
-import { IMAGE_UPLOADER_MAX_SIZE } from '@/lib/constants';
 import { ImageUpIcon } from 'lucide-react';
 import { useRef, useState, useTransition } from 'react';
 
@@ -37,8 +36,9 @@ export function ImageUploader({ disabled = false }: ImageUploaderProps) {
       return;
     }
 
-    if (file.size > IMAGE_UPLOADER_MAX_SIZE) {
-      const readableMaxSize = IMAGE_UPLOADER_MAX_SIZE / 1024;
+    const uploadSize = Number(process.env.IMAGE_UPLOADER_MAX_SIZE) || 921600;
+    if (file.size > uploadSize) {
+      const readableMaxSize = uploadSize / 1024;
       showMessage.error(`Imagem muito grande. Máx: ${readableMaxSize}KB.`);
 
       fileInput.value = '';

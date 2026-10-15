@@ -1,10 +1,5 @@
 'use server';
 
-import {
-  IMAGE_SERVER_URL,
-  IMAGE_UPLOADER_DIRECTORY,
-  IMAGE_UPLOADER_MAX_SIZE,
-} from '@/lib/constants';
 import { mkdir, writeFile } from 'fs/promises';
 import { extname, resolve } from 'path';
 
@@ -30,8 +25,10 @@ export async function uploadImageAction(
     return makeResult({ error: 'Arquivo inválido!' });
   }
 
-  if (file.size > IMAGE_UPLOADER_MAX_SIZE) {
-    const readableMaxSize = IMAGE_UPLOADER_MAX_SIZE / 1024;
+  const uploadSize =
+    Number(process.env.NEXT_PUBLIC_IMAGE_UPLOAD_MAX_SIZE) || 921600;
+  if (file.size > uploadSize) {
+    const readableMaxSize = uploadSize / 1024;
     return makeResult({
       error: `Arquivo de imagem muito grande, Máx: ${readableMaxSize}KB.`,
     });
@@ -43,17 +40,20 @@ export async function uploadImageAction(
 
   const imageExtension = extname(file.name); // pega a extensão do arquivo
   const imageName = `${Date.now()}${imageExtension}`; // monta o nome do arquivo + extensão
-  const fullPath = resolve(process.cwd(), 'public', IMAGE_UPLOADER_DIRECTORY); // monta o caminho completo aonde o arquivo será salvo
-  const fullPathAbsolute = resolve(fullPath, imageName); // monta o caminho absoluto com o nome do arquivo
 
-  await mkdir(fullPath, { recursive: true }); // cria o diretório de acordo com o caminho completo fornecido
+  const uploadDir = process.env.IMAGE_UPLOADER_DIRECTORY || 'uploads';
+  const uploadFullPath = resolve(process.cwd(), 'public', uploadDir);
+  await mkdir(uploadFullPath, { recursive: true }); // cria o diretório de acordo com o caminho completo fornecido
 
+  const fullPathAbsolute = resolve(uploadFullPath, imageName); // monta o caminho absoluto com o nome do arquivo
   const bytes = await file.arrayBuffer(); // pega o array de bytes
   const buffer = Buffer.from(bytes); // transforma o array de bytes em buffer
 
   await writeFile(fullPathAbsolute, buffer); // salva o arquivo
 
-  const url = `${IMAGE_SERVER_URL}/${imageName}`; // monta a url de retorno para visualizar a imagem
+  const imageServerUrl =
+    process.env.IMAGE_SERVER_URL || 'http://localhost:3000/uploads';
+  const url = `${imageServerUrl}/${imageName}`; // monta a url de retorno para visualizar a imagem
 
   return makeResult({ url });
 }

@@ -8,7 +8,7 @@ export interface IPostRepository {
 
   // Mutation
   create(post: PostModel): Promise<PostModel>;
-  delete(id: string): Promise<PostModel>;
+  delete(id: string): Promise<void>;
   update(
     id: string,
     newPostData: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,

@@ -2,12 +2,11 @@ import { PostModel } from '@/models/post-model';
 import { IPostRepository } from './Ipost-repository';
 import { drizzleDb } from '@/db/drizzle';
 import { asyncDelay } from '@/utils/async-delay';
-import { SIMULATE_WAIT_IN_MS } from '@/lib/constants';
 import { postsTable } from '@/db/drizzle/schemas';
 import { eq } from 'drizzle-orm';
 export class DrizzlePostRepository implements IPostRepository {
   async findAllPublic(): Promise<PostModel[]> {
-    await asyncDelay(SIMULATE_WAIT_IN_MS, true);
+    await asyncDelay(Number(process.env.SIMULATE_WAIT_IN_MS), true);
 
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -17,7 +16,7 @@ export class DrizzlePostRepository implements IPostRepository {
   }
 
   async findBySlugPublic(slug: string): Promise<PostModel> {
-    await asyncDelay(SIMULATE_WAIT_IN_MS, true);
+    await asyncDelay(Number(process.env.SIMULATE_WAIT_IN_MS), true);
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { and, eq }) =>
@@ -29,7 +28,7 @@ export class DrizzlePostRepository implements IPostRepository {
   }
 
   async findAll(): Promise<PostModel[]> {
-    await asyncDelay(SIMULATE_WAIT_IN_MS, true);
+    await asyncDelay(Number(process.env.SIMULATE_WAIT_IN_MS), true);
 
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -38,7 +37,7 @@ export class DrizzlePostRepository implements IPostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    await asyncDelay(SIMULATE_WAIT_IN_MS, true);
+    await asyncDelay(Number(process.env.SIMULATE_WAIT_IN_MS), true);
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
@@ -64,7 +63,7 @@ export class DrizzlePostRepository implements IPostRepository {
   }
 
   // Delete
-  async delete(id: string): Promise<PostModel> {
+  async delete(id: string): Promise<void> {
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
     });
@@ -73,7 +72,6 @@ export class DrizzlePostRepository implements IPostRepository {
       throw new Error('Post não existe');
     }
     await drizzleDb.delete(postsTable).where(eq(postsTable.id, id));
-    return post;
   }
 
   // Update
