@@ -1,10 +1,10 @@
 import { PostModel } from '@/models/post-model';
 import { IPostRepository } from './Ipost-repository';
 import { resolve } from 'node:path';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import { SIMULATE_WAIT_IN_MS } from '@/lib/constants';
 
-/**Bloco de código que monta o caminho absoluta para leitura de arquivos seed json */
+/**Bloco de código que monta o caminho absolutO para leitura de arquivos seed json */
 const ROOT_DIR = process.cwd(); // retorna o caminho raiz da aplicação
 const JSON_POSTS_FILE_PATH = resolve(
   ROOT_DIR,
@@ -46,17 +46,63 @@ export class JsonPostRepository implements IPostRepository {
   }
 
   // Mutation
-  create(post: PostModel): Promise<PostModel> {
-    throw new Error('Method not implemented.');
+  // CREATE
+  async create(post: PostModel): Promise<PostModel> {
+    const posts = await this.findAll();
+
+    if (!post.id || !post.slug) {
+      throw new Error('Post sem ID ou Slug');
+    }
+
+    const idOrSlugExist = posts.find(
+      savePost => savePost.id === post.id || savePost.slug === post.slug,
+    );
+
+    if (idOrSlugExist) {
+      throw new Error('ID ou Slug devemn ser únicos');
+    }
+
+    posts.push(post);
+    await this.writeFromDisk(posts);
+    return post;
   }
-  delete(id: string): Promise<PostModel> {
-    throw new Error('Method not implemented.');
+
+  // DELETE
+  async delete(id: string): Promise<PostModel> {
+    const posts = await this.findAll();
+    const postIndex = posts.findIndex(p => p.id === id);
+
+    if (postIndex < 0) {
+      throw new Error('Post não existe');
+    }
+
+    const post = posts[postIndex];
+    posts.splice(postIndex, 1);
+    await this.writeFromDisk(posts);
+    return post;
   }
-  update(
+
+  // UPDATE
+  async update(
     id: string,
-    newPost: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
+    newPostData: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
   ): Promise<PostModel> {
-    throw new Error('Method not implemented.');
+    const posts = await this.findAll();
+    const postIndex = posts.findIndex(p => p.id === id);
+    const savePost = posts[postIndex];
+
+    if (postIndex < 0) {
+      throw new Error('Post não existe');
+    }
+
+    const newPost = {
+      ...savePost,
+      ...newPostData,
+      updateAt: new Date().toISOString(),
+    };
+    posts[postIndex] = newPost;
+    await this.writeFromDisk(posts);
+    return newPost;
   }
 
   // função que le o arquivo JSON , faz o parse e retorna um array de POSTS
@@ -73,28 +119,9 @@ export class JsonPostRepository implements IPostRepository {
 
     await new Promise(resolve => setTimeout(resolve, SIMULATE_WAIT_IN_MS));
   }
+
+  private async writeFromDisk(posts: PostModel[]): Promise<void> {
+    const jsonToString = JSON.stringify({ posts }, null, 2);
+    await writeFile(JSON_POSTS_FILE_PATH, jsonToString, 'utf-8');
+  }
 }
-
-// Instancia da classe
-//export const postRepository: PostRepository = new JsonPostRepository();
-
-/*
-// Execução dos métodos implementados na classe
-// 1º Exemplo para executar essa promise
-//postRepository.findAll().then(jsonContent => console.log(jsonContent));
-
-// 2º Exemplo para executar essa promisse
-(async () => {
-
-  const posts = await postRepository.findAll();
-  posts.forEach(post => {
-    console.log(post.id);
-  });
-
-  const post = await postRepository.findById(
-    '99f8add4-7684-4c16-a316-616271db199e',
-  );
-  console.log(post);
-})();
-
-*/
