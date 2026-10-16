@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
 import { redirect } from 'next/navigation';
+import { logColor } from '@/utils/log-color';
 
 type jwtPayload = {
   username: string;
@@ -89,7 +90,8 @@ export async function verifyToken(token: string | undefined = '') {
     });
     return payload;
   } catch {
-    console.log('Invalid token!');
+    //console.log('{Invalid token!}');
+    logColor('{Invalid token!}');
     return false;
   }
 }
