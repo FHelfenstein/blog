@@ -12,7 +12,6 @@ export function LoginForm() {
   const initialState = {
     username: '',
     error: '',
-    sucess: '',
   };
 
   const [state, action, isPending] = useActionState(loginAction, initialState);
@@ -21,10 +20,6 @@ export function LoginForm() {
     if (state.error) {
       showMessage.dismiss();
       showMessage.error(state.error);
-    }
-    if (state.success) {
-      showMessage.dismiss();
-      showMessage.success(state.success);
     }
   }, [state]);
 

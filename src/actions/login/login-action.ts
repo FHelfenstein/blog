@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 type loginActionState = {
   username: string;
   error: string;
-  success?: string;
 };
 
 export async function loginAction(state: loginActionState, formData: FormData) {
@@ -53,11 +52,6 @@ export async function loginAction(state: loginActionState, formData: FormData) {
       error: 'Usuário ou senha inválidos',
     };
   }
-
-  // TODO: abaixo
-  // Aqui o usuário e senha são válidos
-  // Criar o cookie e redirecionar a página
-
   await createLoginSession(username);
   redirect('/admin/post');
 }
