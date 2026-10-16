@@ -11,11 +11,3 @@ export async function verifyPassword(password: string, base64Hash: string) {
   const hash = Buffer.from(base64Hash, 'base64').toString('utf-8');
   return bcrypt.compare(password, hash);
 }
-
-(async () => {
-  const hashedPassword = await hashPassword('@admin123');
-  console.log('Senha hash em base64: ', hashedPassword);
-
-  const isValidHash = await verifyPassword('@admin123', hashedPassword);
-  console.log({ isValidHash });
-})();
