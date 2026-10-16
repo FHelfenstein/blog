@@ -63,7 +63,7 @@ export class DrizzlePostRepository implements IPostRepository {
   }
 
   // Delete
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<PostModel> {
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
     });
@@ -72,6 +72,8 @@ export class DrizzlePostRepository implements IPostRepository {
       throw new Error('Post não existe');
     }
     await drizzleDb.delete(postsTable).where(eq(postsTable.id, id));
+
+    return post;
   }
 
   // Update

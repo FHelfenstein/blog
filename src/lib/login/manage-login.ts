@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
+import { redirect } from 'next/navigation';
 
 type jwtPayload = {
   username: string;
@@ -45,6 +46,31 @@ export async function deleteLoginSession() {
   cookieStore.delete(loginCookieName);
 }
 
+export async function getLoginSession() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(loginCookieName)?.value;
+
+  if (!token) return false;
+
+  return verifyToken(token);
+}
+
+export async function verifyLoginSession() {
+  const jwtPayload = await getLoginSession();
+
+  if (!jwtPayload) return false;
+
+  return jwtPayload?.username === process.env.LOGIN_USER;
+}
+
+export async function requireLoginSessionOrRedirect() {
+  const isAuthenticated = await verifyLoginSession();
+
+  if (!isAuthenticated) {
+    redirect('/admin/login');
+  }
+}
+
 export async function generateToken(jwtPayload: jwtPayload) {
   return new SignJWT(jwtPayload)
     .setProtectedHeader({
@@ -54,4 +80,16 @@ export async function generateToken(jwtPayload: jwtPayload) {
     .setIssuedAt()
     .setExpirationTime(loginExpStr)
     .sign(jwtEncodedKey);
+}
+
+export async function verifyToken(token: string | undefined = '') {
+  try {
+    const { payload } = await jwtVerify(token, jwtEncodedKey, {
+      algorithms: ['HS256'],
+    });
+    return payload;
+  } catch {
+    console.log('Invalid token!');
+    return false;
+  }
 }

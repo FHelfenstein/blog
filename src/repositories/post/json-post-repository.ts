@@ -68,15 +68,18 @@ export class JsonPostRepository implements IPostRepository {
   }
 
   // DELETE
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<PostModel> {
     const posts = await this.findAll();
     const postIndex = posts.findIndex(p => p.id === id);
 
     if (postIndex < 0) {
       throw new Error('Post não existe');
     }
+    const post = posts[postIndex];
     posts.splice(postIndex, 1);
     await this.writeFromDisk(posts);
+
+    return post;
   }
 
   // UPDATE
