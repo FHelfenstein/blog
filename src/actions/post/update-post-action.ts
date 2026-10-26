@@ -63,7 +63,7 @@ export async function updatePostAction(
   const validPostData = zodParsedObj.data;
   const updatePost = {
     ...validPostData,
-    published: true,
+
   };
 
   let post;
